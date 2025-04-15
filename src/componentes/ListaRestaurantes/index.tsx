@@ -1,36 +1,74 @@
-import { useEffect, useState } from 'react';
-import IRestaurante from '../../interfaces/IRestaurante';
-import style from './ListaRestaurantes.module.scss';
-import Restaurante from './Restaurante';
-import axios from 'axios';
-import { IPaginacao } from '../../interfaces/IPaginacao';
+import { useEffect, useState } from "react";
+import IRestaurante from "../../interfaces/IRestaurante";
+import style from "./ListaRestaurantes.module.scss";
+import Restaurante from "./Restaurante";
+import axios from "axios";
+import { IPaginacao } from "../../interfaces/IPaginacao";
+import { Button, TextField } from "@mui/material";
+
+const base_url = "http://localhost:8000/api/v1/restaurantes/";
 
 const ListaRestaurantes = () => {
-
   const [restaurants, setRestaurants] = useState<IRestaurante[]>([]);
-  const [nextPage, setNextPage] = useState('');
-  const [previousPage, setPreviousPage] = useState('');
+  const [nextPage, setNextPage] = useState("");
+  const [previousPage, setPreviousPage] = useState("");
+  const [searchingRestaurant, setSearchingRestaurant] = useState("");
 
-  const loadData = (url: string) => {
-    axios.get<IPaginacao<IRestaurante>>(url)
-      .then(response => {
+  const loadData = (url: string, params?: Object) => {
+    axios
+      .get<IPaginacao<IRestaurante>>(url, {
+        params: params,
+      })
+      .then((response) => {
         setRestaurants(response.data.results);
         setNextPage(response.data.next);
         setPreviousPage(response.data.previous);
       })
-      .catch(error => console.error(error));
-  }
+      .catch((error) => console.error(error));
+  };
 
   useEffect(() => {
-    loadData('http://localhost:8000/api/v1/restaurantes/');
+    loadData(base_url);
   }, []);
 
-  return (<section className={style.ListaRestaurantes}>
-    <h1>Os restaurantes mais <em>bacanas</em>!</h1>
-    {restaurants.map(item => <Restaurante restaurante={item} key={item.id} />)}
-    <button onClick={()=>loadData(previousPage)} disabled={!previousPage} >Página anterior</button>
-    <button onClick={()=>loadData(nextPage)} disabled={!nextPage}> Próxima página</button>
-  </section>)
-}
+  const onSubmitSearchingForm = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-export default ListaRestaurantes
+    loadData(base_url, {
+      search: searchingRestaurant,
+    });
+  }
+
+  return (
+    <section className={style.ListaRestaurantes}>
+      <div className={style.titleSearch}>
+        <h1>
+          Os restaurantes mais <em>bacanas</em>!
+        </h1>
+        <form onSubmit={onSubmitSearchingForm}>
+          <TextField
+            value={searchingRestaurant}
+            onChange={(e) => setSearchingRestaurant(e.target.value)}
+            label="Buscar restaurante"
+            variant="outlined"
+          />
+          <Button variant="contained" type="submit">
+            Buscar
+          </Button>
+        </form>
+      </div>
+      {restaurants.map((item) => (
+        <Restaurante restaurante={item} key={item.id} />
+      ))}
+      <button onClick={() => loadData(previousPage)} disabled={!previousPage}>
+        Página anterior
+      </button>
+      <button onClick={() => loadData(nextPage)} disabled={!nextPage}>
+        {" "}
+        Próxima página
+      </button>
+    </section>
+  );
+};
+
+export default ListaRestaurantes;

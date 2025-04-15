@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from './paginas/Home';
 import VitrineRestaurantes from './paginas/VitrineRestaurantes';
-import RestaurantsAdmin from './paginas/Admin/Restaurantes';
+import RestaurantsAdmin from './paginas/Admin/Restaurantes/AdminRestaurants';
 
 function App() {
 

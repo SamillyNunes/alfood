@@ -12,7 +12,7 @@ const ListaRestaurantes = () => {
     axios.get('http://localhost:8000/api/v1/restaurantes/')
       .then(response => setRestaurants(response.data.results))
       .catch(error => console.error(error));
-  })
+  }, [])
 
   return (<section className={style.ListaRestaurantes}>
     <h1>Os restaurantes mais <em>bacanas</em>!</h1>

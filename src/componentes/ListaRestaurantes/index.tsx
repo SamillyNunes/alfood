@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import IRestaurante from "../../interfaces/IRestaurante";
 import style from "./ListaRestaurantes.module.scss";
 import Restaurante from "./Restaurante";
-import axios from "axios";
 import { IPaginacao } from "../../interfaces/IPaginacao";
 import { Button, TextField } from "@mui/material";
+import http from "../../http";
 
-const base_url = "http://localhost:8000/api/v1/restaurantes/";
+const base_url = "v1/restaurantes/";
 
 const ListaRestaurantes = () => {
   const [restaurants, setRestaurants] = useState<IRestaurante[]>([]);
@@ -15,7 +15,7 @@ const ListaRestaurantes = () => {
   const [searchingRestaurant, setSearchingRestaurant] = useState("");
 
   const loadData = (url: string, params?: Object) => {
-    axios
+    http
       .get<IPaginacao<IRestaurante>>(url, {
         params: params,
       })

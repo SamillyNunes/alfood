@@ -20,6 +20,7 @@ function App() {
 
         <Route path="pratos" element={<AdminDishes />} />
         <Route path="pratos/novo" element={<FormsDishes />} />
+        <Route path="pratos/:id" element={<FormsDishes />} />
 
       </Route>
     </Routes>

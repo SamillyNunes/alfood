@@ -12,8 +12,12 @@ import { useEffect, useState } from "react";
 import http from "../../../http";
 import ITag from "../../../interfaces/ITag";
 import IRestaurante from "../../../interfaces/IRestaurante";
+import { useParams } from "react-router-dom";
+import IPrato from "../../../interfaces/IPrato";
 
 const FormsDishes = () => {
+  const params = useParams();
+
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState<ITag[]>([]);
@@ -45,10 +49,10 @@ const FormsDishes = () => {
         data: formData,
       })
       .then(() => {
-        setName('');
-        setDescription('');
-        setSelectedTag('');
-        setSelectedRestaurant('');
+        setName("");
+        setDescription("");
+        setSelectedTag("");
+        setSelectedRestaurant("");
         setImage(null);
         alert("Prato cadastrado com sucesso!");
       })
@@ -61,11 +65,38 @@ const FormsDishes = () => {
       .then((response) => setTags(response.data.tags))
       .catch((error) => console.error(error));
 
-    http
-      .get<IRestaurante[]>("v2/restaurantes/")
-      .then((response) => setRestaurants(response.data))
-      .catch((error) => console.error(error));
-  }, []);
+    loadRestaurants().then((restaurantsList) => {
+      if (params.id) {
+        loadDish(restaurantsList ?? []);
+      }
+    });
+  }, [params.id]);
+
+  const loadDish = (restaurantsList: IRestaurante[]) => {
+    http.get<IPrato>(`/v2/pratos/${params.id}/`).then((response) => {
+      setName(response.data.nome);
+      setDescription(response.data.descricao);
+      setSelectedTag(response.data.tag);
+      
+      const sRestaurant = restaurantsList.find(
+        (r) => r.id === response.data.restaurante
+      );
+      
+      if (sRestaurant) setSelectedRestaurant(sRestaurant.id.toString());
+    });
+  };
+
+  const loadRestaurants = async () => {
+    try {
+      const response = await http.get<IRestaurante[]>("v2/restaurantes/");
+      if (response.data) {
+        setRestaurants(response.data);
+        return response.data;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const selectFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.length) {

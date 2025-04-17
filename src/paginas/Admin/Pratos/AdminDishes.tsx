@@ -53,7 +53,7 @@ const AdminDishes = () => {
                 <a href={d.imagem} target="_blank" rel="noreferrer">[ver imagem]</a>
               </TableCell>
               <TableCell>
-                [ <Link to={`/admin/dishes/${d.id}`}>editar</Link> ]
+                [ <Link to={`/admin/pratos/${d.id}`}>editar</Link> ]
               </TableCell>
               <TableCell>
                 <Button

@@ -5,6 +5,7 @@ import RestaurantsAdmin from './paginas/Admin/Restaurantes/AdminRestaurants';
 import FormsRestaurant from './paginas/Admin/Restaurantes/FormsRestaurant';
 import BasePage from './paginas/Admin/BasePage';
 import AdminDishes from './paginas/Admin/Pratos/AdminDishes';
+import FormsDishes from './paginas/Admin/Pratos/FormsDishes';
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
         <Route path="restaurantes/:id" element={<FormsRestaurant />} />
 
         <Route path="pratos" element={<AdminDishes />} />
+        <Route path="pratos/novo" element={<FormsDishes />} />
 
       </Route>
     </Routes>

@@ -41,8 +41,8 @@ const FormsDishes = () => {
 
     http
       .request({
-        url: "v2/pratos/",
-        method: "POST",
+        url: params.id ? `v2/pratos/${params.id}/` : 'v2/pratos/',
+        method: params.id? "PUT" : "POST",
         headers: {
           "Content-Type": "multipart/form-data",
         },

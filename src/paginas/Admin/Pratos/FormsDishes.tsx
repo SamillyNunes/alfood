@@ -44,7 +44,14 @@ const FormsDishes = () => {
         },
         data: formData,
       })
-      .then((response) => alert("Prato cadastrado com sucesso!"))
+      .then(() => {
+        setName('');
+        setDescription('');
+        setSelectedTag('');
+        setSelectedRestaurant('');
+        setImage(null);
+        alert("Prato cadastrado com sucesso!");
+      })
       .catch((error) => console.error(error));
   };
 
